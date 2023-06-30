@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CRUD de Veículos</title>
+</head>
+<body>
+    <h1>Bem-vindo ao sistema de CRUD de veículos</h1>
+    <p id="Count"></p>
+    <p>Escolha uma das opções do sistema:</p>
+    <ul>
+        <li><button onclick="cadastrarVeiculo()">1 - Cadastrar veículo</button></li>
+        <li><button onclick="listarVeiculos()">2 - Listar todos os veículos</button></li>
+        <li><button onclick="filtrarVeiculos()">3 - Filtrar veículos por marca</button></li>
+        <li><button onclick="atualizarVeiculo()">4 - Atualizar veículo</button></li>
+        <li><button onclick="removerVeiculo()">5 - Remover veículo</button></li>
+        <li><button onclick="sairDoSistema()">6 - Sair do sistema</button></li>
+    </ul>
+
+    <script>
+        // Dados de exemplo para teste
+        let veiculo = [
+            { id: 1, modelo: 'Civic', marca: 'Honda', ano: '2014/2015', cor: 'Azul', preco: 40000 },
+            { id: 2, modelo: 'Golf', marca: 'Volkswagen', ano: '2016', cor: 'Preto', preco: 45000 },
+            { id: 3, modelo: 'Corolla', marca: 'Toyota', ano: '2017', cor: 'Branco', preco: 50000 }
+        ];
+
+        function exibirContagemVeiculos() {
+            const CountElement = document.getElementById('Count');
+            CountElement.textContent = `No momento, o sistema tem ${veiculo.length} carros cadastrados`;
+        }
+
+        function cadastrarVeiculo() {
+            const modelo = prompt('Digite o modelo do veículo:');
+            const marca = prompt('Digite a marca do veículo:');
+            const ano = prompt('Digite o ano do veículo:');
+            const cor = prompt('Digite a cor do veículo:');
+            const preco = parseFloat(prompt('Digite o preço do veículo:'));
+
+            const id = veiculo.length > 0 ? veiculo[veiculo.length - 1].id + 1 : 1;
+
+            const novoVeiculo = { id, modelo, marca, ano, cor, preco };
+            veiculo.push(novoVeiculo);
+
+            alert('Veículo cadastrado com sucesso!');
+            exibirContagemVeiculos();
+        }
+
+        function listarVeiculos() {
+            if (veiculo.length === 0) {
+                alert('Nenhum veículo cadastrado');
+            } else {
+                alert('Veículos cadastrados:\n\n' + formatarVeiculos(veiculo));
+            }
+        }
+
+        function filtrarVeiculos() {
+            const marcaFiltro = prompt('Digite a marca para filtrar os veículos:');
+            const veiculosFiltrados = veiculo.filter(vehicle => vehicle.marca.toLowerCase() === marcaFiltro.toLowerCase());
+            if (veiculosFiltrados.length === 0) {
+                alert('Nenhum veículo encontrado com essa marca');
+            } else {
+                alert('Veículos encontrados:\n\n' + formatarVeiculos(veiculosFiltrados));
+            }
+        }
+
+        function atualizarVeiculo() {
+            const idVeiculo = parseInt(prompt('Digite o ID do veículo que deseja atualizar:'));
+
+            const veiculoEncontrado = veiculo.find(vehicle => vehicle.id === idVeiculo);
+            if (!veiculoEncontrado) {
+                alert('Veículo não encontrado');
+            } else {
+                const novaCor = prompt('Digite a nova cor do veículo:');
+                const novoPreco = parseFloat(prompt('Digite o novo preço do veículo:'));
+
+                veiculoEncontrado.cor = novaCor;
+                veiculoEncontrado.preco = novoPreco;
+
+                alert('Veículo atualizado com sucesso!');
+            }
+        }
+
+        function removerVeiculo() {
+            const idVeiculo = parseInt(prompt('Digite o ID do veículo que deseja remover:'));
+
+            const indiceVeiculo = veiculo.findIndex(vehicle => vehicle.id === idVeiculo);
+            if (indiceVeiculo === -1) {
+                alert('Veículo não encontrado');
+            } else {
+                veiculo.splice(indiceVeiculo, 1);
+                alert('Veículo removido com sucesso!');
+                exibirContagemVeiculos();
+            }
+        }
+
+        function sairDoSistema() {
+            alert('Saindo do sistema...');
+            
+        }
+
+        function formatarVeiculos(veiculos) {
+            return veiculos.map(vehicle => `ID: ${vehicle.id} | Modelo: ${vehicle.modelo} | Marca: ${vehicle.marca} | Ano: ${vehicle.ano} | Cor: ${vehicle.cor} | Preço: R$${vehicle.preco.toFixed(2)}`).join('\n');
+        }
+
+        exibirContagemVeiculos();
+    </script>
+</body>
+</html>
